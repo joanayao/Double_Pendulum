@@ -13,19 +13,21 @@ struct Point{
     double time;
     double theta1;
     double theta2;
-    double vel_1;
-    double vel_2;
+    double vel1;
+    double vel2;
 };
 
 class DoublePendulum{
 
     public:
         //constructor and destructor
-        DoublePendulum(double l1, double l2, double t1, double t2, double gravity_ = 9.81);
+        DoublePendulum(double l1 = 1, double l2 = 1, double t1 = 1, double t2 = 0.5, double gravity_ = 9.81);
         ~DoublePendulum() = default;
 
         //Runge-kutta 4th Order Solver
         void Solver(double Time, double step);
+
+        //draw graphs
 
     private:
 
@@ -39,7 +41,7 @@ class DoublePendulum{
         double G = 9.81;
         
         //functions to be solved
-        map<string,function<double(Point)>> functions;
+        vector<function<double(Point)>> functions;
 
         //store results
         vector<Point> Points;
