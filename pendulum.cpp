@@ -1,10 +1,9 @@
 #include "pendulum.h"
 
 DoublePendulum::DoublePendulum(double lenght1_, double lenght2_, double theta1_, double theta2_, double gravity_, double mass1_, double mass2_){
+    //stora pendulum characteristics (constants)
     lenght_1 = lenght1_;
     lenght_2 = lenght2_;
-    theta_1 = theta1_;
-    theta_2 = theta2_;
     G = gravity_;
     mass_1 = mass1_;
     mass_2 = mass2_;
@@ -12,29 +11,34 @@ DoublePendulum::DoublePendulum(double lenght1_, double lenght2_, double theta1_,
     //store initial position
     Point Initial;
     Initial.time = 0;
-    Initial.theta1 = theta_1;
-    Initial.theta2 = theta_2;
+    Initial.theta1 = theta1_;
+    Initial.theta2 = theta2_;
     Initial.vel1 = 0;
     Initial.vel2 = 0;
-
     Points.push_back(Initial);
 
-    //set Lagrangian functions
-    function<double(Point)> acel_2 = [this](Point P){
+    //Set Lagrangian functions
+
+    //function for angular acceleration (theta1)
+    function<double(Point)> acel_1 = [this](Point P){
         return ((mass_1+mass_2)*G*sin(P.theta1)*cos(P.theta1-P.theta2)*(lenght_1*P.vel1*P.vel1*sin(P.theta1-P.theta2)-G*sin(P.theta2))
         -mass_2*lenght_2*P.vel2*sin(P.theta1-P.theta2))/((mass_1+mass_2)*lenght_1-mass_2*lenght_1*lenght_2*cos(P.theta1-P.theta2)*cos(P.theta1-P.theta2));
     } ;
 
-    function<double(Point)> acel_1 = [this](Point P){
+    //function for angular acceleration (theta2)
+    function<double(Point)> acel_2 = [this](Point P){
         return lenght_1*P.vel2*P.vel2*sin(P.theta1-P.theta2)-G*sin(P.theta2)-lenght_1*cos(P.theta1-P.theta2)*
         (((mass_1+mass_2)*G*sin(P.theta1)*cos(P.theta1-P.theta2)*(lenght_1*P.vel1*P.vel1*sin(P.theta1-P.theta2)-G*sin(P.theta2))
         -mass_2*lenght_2*P.vel2*sin(P.theta1-P.theta2))/((mass_1+mass_2)*lenght_1-mass_2*lenght_1*lenght_2*cos(P.theta1-P.theta2)*cos(P.theta1-P.theta2)));
     };
 
+    //function for angular velocity (theta1)
     function<double(Point)> vel_1 = [this](Point P){return P.vel1;};
     
+    //function for angular velocity (theta2)
     function<double(Point)> vel_2 = [this](Point P){return P.vel2;};    
 
+    //store functions
     functions.push_back(acel_1);
     functions.push_back(acel_2);
     functions.push_back(vel_1);
@@ -46,15 +50,17 @@ void DoublePendulum::Solver(double Time, double step){
 
     double current_time = 0;
 
-    double k1, k2, k3, k4, // for function acel_1
-        l1, l2, l3, l4, // for function acel_2
-        m1, m2, m3, m4, // for function vel_1
-        n1, n2, n3, n4; // for function vel_2
+    //variables to store slopes 
+    double k1, k2, k3, k4, // for function acel_1 (slope for vel1)
+        l1, l2, l3, l4, // for function acel_2 (slope for vel2)
+        m1, m2, m3, m4, // for function vel_1 (slope for theta1)
+        n1, n2, n3, n4; // for function vel_2 (slope for theta2)
 
-    int i = 0;
+    int i = 0; // counter
     Point aux; // auxiliar point used for intermediate contas
 
     while(current_time < Time){
+
 
         k1 = functions[1](Points[i]); 
         l1 = functions[2](Points[i]);

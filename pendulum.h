@@ -31,14 +31,11 @@ class DoublePendulum{
 
     private:
 
+        //characteristics of the pendulum (constants)
         double lenght_1; 
         double lenght_2;
-        double theta_1;
-        double theta_2;
-
         double mass_1; //kg
         double mass_2;
-
         double G = 9.81;
         
         //functions to be solved
