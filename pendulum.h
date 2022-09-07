@@ -21,7 +21,7 @@ class DoublePendulum{
 
     public:
         //constructor and destructor
-        DoublePendulum(double l1 = 1, double l2 = 1, double t1 = 1, double t2 = 0.5, double gravity_ = 9.81);
+        DoublePendulum(double l1 = 1, double l2 = 1, double t1 = 1, double t2 = 0.5, double gravity_ = 9.81, double m1 = 1, double m2 = 1);
         ~DoublePendulum() = default;
 
         //Runge-kutta 4th Order Solver
@@ -36,7 +36,8 @@ class DoublePendulum{
         double theta_1;
         double theta_2;
 
-        //double mass = 1; //kg
+        double mass_1; //kg
+        double mass_2;
 
         double G = 9.81;
         
