@@ -3,8 +3,6 @@
 
 #include <cmath>
 #include <functional>
-#include <map>
-#include <string>
 #include <vector>
 
 using namespace std;

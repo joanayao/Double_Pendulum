@@ -62,31 +62,31 @@ void DoublePendulum::Solver(double Time, double step){
     while(current_time < Time){
 
 
-        k1 = functions[1](Points[i]); 
-        l1 = functions[2](Points[i]);
-        m1 = functions[3](Points[i]);
-        n1 = functions[4](Points[i]);
-
+        k1 = functions[0](Points[i]); 
+        l1 = functions[1](Points[i]);
+        m1 = functions[2](Points[i]);
+        n1 = functions[3](Points[i]);
+        
         aux.time = current_time + step/2;
         aux.vel1 = Points[i].vel1 + step/2*k1;
         aux.vel2 = Points[i].vel2 + step/2*l1;
         aux.theta1 = Points[i].theta1 + step/2*m1;
         aux.theta2 = Points[i].theta2 + step/2*n1;
 
-        k2 = functions[1](aux); 
-        l2 = functions[2](aux);
-        m2 = functions[3](aux);
-        n2 = functions[4](aux);
+        k2 = functions[0](aux); 
+        l2 = functions[1](aux);
+        m2 = functions[2](aux);
+        n2 = functions[3](aux);
 
         aux.vel1 = Points[i].vel1 + step/2*k2;
         aux.vel2 = Points[i].vel2 + step/2*l2;
         aux.theta1 = Points[i].theta1 + step/2*m2;
         aux.theta2 = Points[i].theta2 + step/2*n2;
 
-        k3 = functions[1](aux); 
-        l3 = functions[2](aux);
-        m3 = functions[3](aux);
-        n3 = functions[4](aux);
+        k3 = functions[0](aux); 
+        l3 = functions[1](aux);
+        m3 = functions[2](aux);
+        n3 = functions[3](aux);
 
         aux.time = current_time + step;
         aux.vel1 = Points[i].vel1 + step*k3;
@@ -94,10 +94,10 @@ void DoublePendulum::Solver(double Time, double step){
         aux.theta1 = Points[i].theta1 + step*m3;
         aux.theta2 = Points[i].theta2 + step*n3;
 
-        k4 = functions[1](aux); 
-        l4 = functions[2](aux);
-        m4 = functions[3](aux);
-        n4 = functions[4](aux);
+        k4 = functions[0](aux); 
+        l4 = functions[1](aux);
+        m4 = functions[2](aux);
+        n4 = functions[3](aux);
 
         // final result (next point)
         aux.vel1 = Points[i].vel1 + 1./6.*step*(k1+2*k2+2*k3+k4);
